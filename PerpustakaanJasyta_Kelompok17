@@ -1,0 +1,327 @@
+package perpustakaanjasyta;
+
+public class PerpustakaanJasyta {
+
+    public static void main(String[] args) {
+        //Instance Admin
+        AdminPerpustakaan admin = new AdminPerpustakaan(1, "Admin Perpustakaan");
+
+        //Instance Buku
+        Buku buku1 = new Buku("1234-56-789-0", "Dikta & Hukum", "Dhia'an Farah", true);
+        Buku buku2 = new Buku("1029-38-475-6", "KAMUS INGGRIS INDONESIA", "JOHN M.ECHOLS & HASSAN SHADILY", true);
+        
+        //Admin Menambah Buku ke Koleksi Perpustakaan
+        admin.addBuku(buku1);
+        admin.addBuku(buku2);
+
+        //AdminPerpustakaan Menambahkan Anggota Perpustakaan
+        Anggota_Perpustakaan Anggota_Perpustakaan = new Anggota_Perpustakaan(00123, "Nadhira", "Bandar Lampung"); 
+    }
+}
+
+
+
+
+
+package perpustakaanjasyta;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class AdminPerpustakaan {
+
+    static void tambahAnggota(Anggota_Perpustakaan Anggota_Perpustakaan) {
+        throw new UnsupportedOperationException("Not supported yet."); 
+    }
+    private ArrayList<Buku> daftarBuku = new ArrayList<>();
+    private ArrayList<Anggota_Perpustakaan> anggota = new ArrayList<>();
+    private ArrayList<Transaksi> transaksi_peminjaman = new ArrayList<>();
+    private ArrayList<Transaksi> transaksi_pengembalian = new ArrayList<>();
+    private int id_AdminPerpustakaan;
+    private String nama_AdminPerpustakaan;
+
+    public void addAnggota(Anggota_Perpustakaan anggota) {
+        this.anggota.add(anggota);
+        System.out.println(anggota.getNama()+ " berhasil ditambahkan ke Anggota Perpustakaan!");
+    }
+
+    public void setTransaksi_peminjaman(Transaksi transaksi_peminjaman) {
+        this.transaksi_peminjaman.add(transaksi_peminjaman);
+        System.out.println("Transaksi Peminjaman baru saja dilakukan.");
+    }
+
+    public void setTransaksi_pengembalian(Transaksi transaksi_pengembalian) {
+        this.transaksi_pengembalian.add(transaksi_pengembalian);
+        System.out.println("Transaksi Pengembalian baru saja dilakukan.");
+    }
+
+    public void setId_AdminPerpustakaan(int id_AdminPerpustakaan) {
+        this.id_AdminPerpustakaan = id_AdminPerpustakaan;
+    }
+
+    public void setNama_AdminPerpustakaan(String nama_AdminPerpustakaan) {
+        this.nama_AdminPerpustakaan = nama_AdminPerpustakaan;
+    }
+
+    public AdminPerpustakaan(int id_AdminPerpustakaan, String nama_admin) {
+        this.id_AdminPerpustakaan = id_AdminPerpustakaan;
+        this.nama_AdminPerpustakaan = nama_AdminPerpustakaan;
+    }
+
+    public void addBuku(Buku buku){
+        daftarBuku.add(buku);
+        System.out.println("\""+ buku.getJudul()+"\" Berhasil ditambahkan ke Koleksi Buku Perpustakaan!");
+    }
+
+    public ArrayList<Anggota_Perpustakaan> getAnggota() {
+        return anggota;
+    }
+
+    public ArrayList<Buku> getDaftarBuku() {
+        return daftarBuku;
+    }
+
+    public ArrayList<Transaksi> getTransaksi_peminjaman() {
+        return transaksi_peminjaman;
+    }
+
+    public ArrayList<Transaksi> getTransaksi_pengembalian() {
+        return transaksi_pengembalian;
+    }
+
+    public int getId_AdminPerpustakaan() {
+        return id_AdminPerpustakaan;
+    }
+
+    public String getName_AdminPerpustakaan() {
+        return nama_AdminPerpustakaan;
+    }
+
+}
+
+
+
+
+
+package perpustakaanjasyta;
+
+import java.util.ArrayList;
+
+public class Anggota_Perpustakaan {
+    private int idAnggota;
+    private String nama;
+    private String alamat;
+    private final ArrayList<Transaksi> transaksi_peminjaman = new ArrayList<>();
+    private final ArrayList<Buku> buku = new ArrayList<>();
+
+    public Anggota_Perpustakaan(int nomorAnggota, String nama, String alamat){
+        this.idAnggota = nomorAnggota;
+        this.nama = nama;
+        this.alamat = alamat;
+    }
+
+    public int getNomorAnggota() {
+        return idAnggota;
+    }
+
+    public void setNomorAnggota(int nomorAnggota) {
+        this.idAnggota = nomorAnggota;
+    }
+
+    public String getNama() {
+        return nama;
+    }
+
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public String getAlamat() {
+        return alamat;
+    }
+
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
+    }
+
+    public ArrayList<Transaksi> getTransaksi_peminjaman() {
+        return (ArrayList<Transaksi>) transaksi_peminjaman;
+    }
+
+    public ArrayList<Buku> getBuku() {
+        return buku;
+    }
+
+    public void pinjamBuku(Buku buku, Transaksi transaksi) {
+        if(buku.isStatusKetersediaan()){
+            this.getBuku().add(buku);
+            buku.setStatusKetersediaan(false);
+            System.out.println(nama + " berhasil melakukan peminjaman buku \""+ buku.getJudul()+"\"");
+            return;
+        }
+        System.out.println("Buku tidak tersedia");
+    }
+
+    public void kembalikanBuku(Buku buku, Transaksi transaksi) {
+        if(!buku.isStatusKetersediaan()){
+            this.getBuku().remove(buku);
+            buku.setStatusKetersediaan(true);
+            System.out.println(nama + " berhasil melakukan pengembalian buku \""+ buku.getJudul()+"\"");
+            return;
+        }
+        System.out.println("Buku tidak tersedia");
+    }
+
+    public void cariBuku(String cari, AdminPerpustakaan a){
+        for(Buku i : a.getDaftarBuku() ){
+            if(i.getJudul().equals(cari)){
+            System.out.println("Nama Buku : " + i.getJudul());
+            System.out.println("ISBN : " + i.getNomorISBN());
+            System.out.println("Pengarang " + i.getPengarang());
+            System.out.println("Status : " + (i.isStatusKetersediaan()? "Tersedia" : "Tidak Tersedia"));
+            return;
+            }
+        }
+    }
+}
+
+
+
+
+
+package perpustakaanjasyta;
+
+public class Buku {
+    private String nomorISBN;
+    private String judul;
+    private String pengarang;
+    private boolean statusKetersediaan;
+
+    public Buku(String nomorISBN, String judul, String pengarang, boolean
+    statusKetersediaan) {
+        this.nomorISBN = nomorISBN;
+        this.judul = judul;
+        this.pengarang = pengarang;
+        this.statusKetersediaan = statusKetersediaan;
+    }
+
+    public String getNomorISBN() {
+        return nomorISBN;
+    }
+
+    public void setNomorISBN(String nomorISBN) {
+        this.nomorISBN = nomorISBN;
+    }
+
+    public String getJudul() {
+        return judul;
+    }
+
+    public void setJudul(String judul) {
+        this.judul = judul;
+    }
+
+    public String getPengarang() {
+        return pengarang;
+    }
+
+    public void setPengarang(String pengarang) {
+        this.pengarang = pengarang;
+    }
+
+    public boolean isStatusKetersediaan() {
+        return statusKetersediaan;
+    }
+
+    public void setStatusKetersediaan(boolean statusKetersediaan) {
+        this.statusKetersediaan = statusKetersediaan;
+    }
+
+}
+
+
+
+
+
+package perpustakaanjasyta;
+
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+public class Notifikasi {
+    private Anggota_Perpustakaan penerima;
+    private Transaksi transaksi;
+    private String pesan;
+    private Date waktu;
+
+    public Notifikasi(Transaksi transaksi) {
+        this.transaksi = transaksi;
+    }
+
+    public int Durasi() {
+        Date awal = transaksi.getTanggalPeminjaman();
+        Date akhir = transaksi.getTanggalPengembalian();
+        long selisihMilidetik = akhir.getTime() - awal.getTime();
+        int durasi = (int) TimeUnit.MILLISECONDS.toDays(selisihMilidetik);
+        return durasi;
+    }
+
+    public void pesan(){
+        Date now = new Date();
+        if(this.Durasi() ==1){
+            System.out.println("Batas peminjaman Anda tinggal " +
+        this.Durasi() + " Hari");
+
+        }else if(this.Durasi() < 0){
+            System.out.println("Kena Denda");
+        }
+    }
+}
+
+
+
+
+
+package perpustakaanjasyta;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+public class Transaksi {
+    private Date tanggalPeminjaman;
+    private Date tanggalPengembalian;
+    private ArrayList<Buku> buku = new ArrayList<>();
+    private Anggota_Perpustakaan anggota;
+
+    public Transaksi(Date tanggalPeminjaman, Date tanggalPengembalian, Anggota_Perpustakaan anggota) {
+        this.tanggalPeminjaman = tanggalPeminjaman;
+        this.tanggalPengembalian = tanggalPengembalian;
+        this.anggota = anggota;
+    }
+
+    public Transaksi(){
+    }
+
+    public Date getTanggalPeminjaman() {
+        return tanggalPeminjaman;
+    }
+
+    public Date getTanggalPengembalian() {
+        return tanggalPengembalian;
+    }
+
+    public ArrayList<Buku> getBuku() {
+        return buku;
+    }
+
+    public Anggota_Perpustakaan getAnggota() {
+        return anggota;
+    }
+
+    public class TransaksiPengembalian extends Transaksi {
+        Transaksi tp;
+        public TransaksiPengembalian(Transaksi tp) {
+            this.tp = tp;
+        }
+    }
+}
